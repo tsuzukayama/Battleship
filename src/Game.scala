@@ -6,10 +6,13 @@ object Game {
   
   private def gameOverHits: Int = 4 + 3 + 2 + 1
   
-  def hit(attack: Player, defender: Player, pos: Point): Field = {
+  def hit(attack: Player, defender: Player, pos: Point): (Player,Boolean) = {
     if (defender.myField.hit(pos)._2)
-      attack.opField.hit(pos)._1
-    else attack.opField
+      (new Player(
+          myField = attack.myField, 
+          opField = new Field(attack.opField.updateState(attack.opField.points, pos, pStates.hit)), 
+          name = attack.name), true)
+    else (attack, false)
   }
   
   def checkGame(p1: Player, p2: Player): Char = {
