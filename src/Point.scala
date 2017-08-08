@@ -10,7 +10,7 @@ class Point(val x: Int, val y: Int) {
       case _ => false
     } 
 
-  override def toString: String = "\n(" + x + ", " + y + ")"
+  override def toString: String = "|" + x + ", " + y + "|"
 
   override def hashCode() = (x.hashCode() * 10) * y.hashCode()
 }

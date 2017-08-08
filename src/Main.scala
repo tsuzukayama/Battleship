@@ -35,6 +35,7 @@ object Main {
       if(Game.checkGame(aP, dP) == gStates.fWon) aP
       if(Game.checkGame(aP, dP) == gStates.sWon) dP
       else {
+        Utils.printFields(aP.opField, dP.opField, aP.name, dP.name)
         println(aP.name + ", sua vez: ")
         val hitP = new Point(scala.io.StdIn.readInt(), scala.io.StdIn.readInt())
         val gameHit = Game.hit(aP, dP, hitP)
