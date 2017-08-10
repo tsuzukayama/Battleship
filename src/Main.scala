@@ -1,13 +1,42 @@
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Failure, Success }
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import java.io._
+import java.util.Scanner
+
 object Main {
   def main(args: Array[String]) {
+
     println("Entre com o seu nome, jogador 1: ")
+
     val p1Name = scala.io.StdIn.readLine()
     val p1 = new Player(myField = posShips(new Field), name = p1Name)
+
     println("Entre com o seu nome, jogador 2: ")
+
     val p2Name = scala.io.StdIn.readLine()
     val p2 = new Player(myField = posShips(new Field), name = p2Name)
-    
+
     startGame(p1, p2)
+
+    val data: Future[List[String]] = Future {
+       Utils.readFile("Ranking.txt") 
+    } 
+
+    data.recover {
+      case e: FileNotFoundException => {
+        List[String]()
+      }
+    }.onSuccess {
+      case v => {
+        val m = v(0).split(" ").toList.groupBy(i => i).mapValues(_.size)
+        println("-----RANKING GERAL-----")        
+        println(m.map(p => p._1 + " -> " + p._2 + " vitórias").mkString("\n"))
+      }
+    }
+    Await.result(data, Duration.Inf)
   }
 
   def posShips(f: Field): Field = {
@@ -28,12 +57,12 @@ object Main {
     }
     go(f)
   }
-  
-  def startGame(p1: Player, p2: Player): Player = {
-    def go(aP: Player, dP: Player): Player = {
-      if(Game.checkGame(aP, dP) == gStates.draw) new Player with PlayerDraw
-      if(Game.checkGame(aP, dP) == gStates.fWon) aP
-      if(Game.checkGame(aP, dP) == gStates.sWon) dP
+
+  def startGame(p1: Player, p2: Player) {
+    def go(aP: Player, dP: Player) {
+      if (Game.checkGame(aP, dP) == gStates.draw) Utils.stateWin(new Player with PlayerDraw)
+      else if (Game.checkGame(aP, dP) == gStates.fWon) Utils.stateWin(aP)
+      else if (Game.checkGame(aP, dP) == gStates.sWon) Utils.stateWin(dP)
       else {
         Utils.printFields(aP.opField, dP.opField, aP.name, dP.name)
         println(aP.name + ", sua vez: ")
