@@ -1,8 +1,3 @@
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{ Failure, Success }
-import scala.concurrent.Await
-import scala.concurrent.duration._
 import java.io._
 import java.util.Scanner
 import scala.io.StdIn
@@ -13,8 +8,6 @@ object pStates {
   def hit: Char = 'h'
   def miss: Char = 'm'
 }
-
-
 
 object gStates {
   def inProgress: Char = 'i'
@@ -73,12 +66,12 @@ object Utils {
 
       bw.write(p.name + " ")
       bw.close()
-    }    
+    }
   }
 
   def readFile(fileName: String): String = {
-    val f =io.Source.fromFile(fileName).getLines.toList
-    val m = f(0).split(" ").toList.groupBy(i => i).mapValues(_.size)            
+    val f = io.Source.fromFile(fileName).getLines.toList
+    val m = f(0).split(" ").toList.groupBy(i => i).mapValues(_.size)
     m.map(p => p._1 + " -> " + p._2 + " vitórias").mkString("\n")
-  }   
+  }
 }

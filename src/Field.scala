@@ -1,8 +1,8 @@
 class Field(val points: Map[Point, Char] = (for (
-  i <- 0 until 10;
-  j <- 0 until 10
-) yield new Point(i, j)) map (p => p -> pStates.empty) toMap,
-    val ships: Map[Point, Ship] = Map()) {
+              i <- 0 until 10;
+              j <- 0 until 10
+            ) yield new Point(i, j)) map (p => p -> pStates.empty) toMap,
+            val ships: Map[Point, Ship] = Map()) {
 
   def updateState(points: Map[Point, Char], pos: Point, state: Char): Map[Point, Char] = points + (pos -> state)
 
