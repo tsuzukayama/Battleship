@@ -5,6 +5,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import java.io._
 import java.util.Scanner
+import scala.io.StdIn
 
 object pStates {
   def occupied: Char = 'o'
@@ -75,7 +76,9 @@ object Utils {
     }    
   }
 
-  def readFile(fileName: String) = {
-    io.Source.fromFile(fileName).getLines.toList
-  }
+  def readFile(fileName: String): String = {
+    val f =io.Source.fromFile(fileName).getLines.toList
+    val m = f(0).split(" ").toList.groupBy(i => i).mapValues(_.size)            
+    m.map(p => p._1 + " -> " + p._2 + " vitórias").mkString("\n")
+  }   
 }

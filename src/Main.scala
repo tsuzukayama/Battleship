@@ -5,13 +5,15 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import java.io._
 import java.util.Scanner
+import scala.util.Try
 
 object Main {
   def main(args: Array[String]) {
 
     println("Entre com o seu nome, jogador 1: ")
-
+    
     val p1Name = scala.io.StdIn.readLine()
+    
     val p1 = new Player(myField = posShips(new Field), name = p1Name)
 
     println("Entre com o seu nome, jogador 2: ")
@@ -21,7 +23,7 @@ object Main {
 
     startGame(p1, p2)
 
-    val data: Future[List[String]] = Future {
+    val data: Future[String] = Future {
        Utils.readFile("Ranking.txt") 
     } 
 
@@ -29,12 +31,13 @@ object Main {
       case e: FileNotFoundException => {
         List[String]()
       }
-    }.onSuccess {
-      case v => {
-        val m = v(0).split(" ").toList.groupBy(i => i).mapValues(_.size)
-        println("-----RANKING GERAL-----")        
-        println(m.map(p => p._1 + " -> " + p._2 + " vitórias").mkString("\n"))
-      }
+    }.onComplete {
+      case Success(v:String) => {
+        println("--------RAKING GERAL--------")
+        println(v)
+      }      
+      case Failure(e) => e.printStackTrace()
+      case _ => println("Erro desconhecido")
     }
     Await.result(data, Duration.Inf)
   }
@@ -44,8 +47,8 @@ object Main {
       if (f.ships.size >= 4) f
       else {
         println("Adicione o navio de tamanho " + (f.ships.size + 1))
-        val x = scala.io.StdIn.readInt()
-        val y = scala.io.StdIn.readInt()
+        val x = scala.io.StdIn.readInt()        
+        val y = scala.io.StdIn.readInt()        
         val dir = scala.io.StdIn.readChar()
         f.ships.size + 1 match {
           case 1 => go(f.placeShip(new shipOne(dir), new Point(x, y)))
