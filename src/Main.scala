@@ -6,39 +6,35 @@ import scala.concurrent.duration._
 import java.io._
 import java.util.Scanner
 
-object Main {
+object Main extends App {
   val scanner = new java.util.Scanner(System.in)
   
-  def main(args: Array[String]) {
-    
-   
-    println("Entre com o seu nome, jogador 1: ")
+  println("Entre com o seu nome, jogador 1: ")
 
-    val p1Name = scanner.next()
+  val p1Name = scanner.next()
 
-    val p1 = new Player(myField = posShips(new Field), name = p1Name)
+  val p1 = new Player(myField = posShips(new Field), name = p1Name)
 
-    println("Entre com o seu nome, jogador 2: ")
+  println("Entre com o seu nome, jogador 2: ")
 
-    val p2Name = scanner.next()
-    val p2 = new Player(myField = posShips(new Field), name = p2Name)
+  val p2Name = scanner.next()
+  val p2 = new Player(myField = posShips(new Field), name = p2Name)
 
-    startGame(p1, p2)
+  startGame(p1, p2)
 
-    val data: Future[String] = Future {
-      Utils.readFile("Ranking.txt")
-    }
-
-    data.onComplete {
-      case Success(v: String) => {
-        println("--------RAKING GERAL--------")
-        println(v)
-      }
-      case Failure(e) => e.printStackTrace()
-      case _          => println("Erro desconhecido")
-    }
-    Await.result(data, Duration.Inf)
+  val data: Future[String] = Future {
+    Utils.readFile("Ranking.txt")
   }
+
+  data.onComplete {
+    case Success(v: String) => {
+      println("--------RAKING GERAL--------")
+      println(v)
+    }
+    case Failure(e) => e.printStackTrace()
+    case _          => println("Erro desconhecido")
+  }
+  Await.result(data, Duration.Inf)
 
   def posShips(f: Field): Field = {
     def go(f: Field): Field = {
