@@ -8,36 +8,42 @@ import java.util.Scanner
 
 object Main {
   val scanner = new java.util.Scanner(System.in)
-  
+
   def main(args: Array[String]) {
-    
-   
-    println("Entre com o seu nome, jogador 1: ")
 
-    val p1Name = scanner.next()
+    def repeatLoop(body: => Unit) = new Until(body)
+    repeatLoop {
 
-    val p1 = new Player(myField = posShips(new Field), name = p1Name)
+      println("Entre com o seu nome, jogador 1: ")
 
-    println("Entre com o seu nome, jogador 2: ")
+      val p1Name = scanner.next()
 
-    val p2Name = scanner.next()
-    val p2 = new Player(myField = posShips(new Field), name = p2Name)
+      val p1 = new Player(myField = posShips(new Field), name = p1Name)
 
-    startGame(p1, p2)
+      println("Entre com o seu nome, jogador 2: ")
 
-    val data: Future[String] = Future {
-      Utils.readFile("Ranking.txt")
-    }
+      val p2Name = scanner.next()
+      val p2 = new Player(myField = posShips(new Field), name = p2Name)
 
-    data.onComplete {
-      case Success(v: String) => {
-        println("--------RAKING GERAL--------")
-        println(v)
+      startGame(p1, p2)
+
+      val data: Future[String] = Future {
+        Utils.readFile("Ranking.txt")
       }
-      case Failure(e) => e.printStackTrace()
-      case _          => println("Erro desconhecido")
-    }
-    Await.result(data, Duration.Inf)
+
+      data.onComplete {
+        case Success(v: String) => {
+          println("--------RAKING GERAL--------")
+          println(v)
+          println("\nJogar de novo?")
+        }
+        case Failure(e) => e.printStackTrace()
+        case _          => println("Erro desconhecido")
+      }
+      Await.result(data, Duration.Inf)
+      
+    } until (scanner.next != "n")
+
   }
 
   def posShips(f: Field): Field = {

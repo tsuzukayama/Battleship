@@ -16,6 +16,13 @@ object gStates {
   def draw: Char = 'd'
 }
 
+class Until(body: => Unit) {
+        def until(cond: => Boolean) {
+            body
+            if(cond) until(cond)
+        }
+    }
+
 //desculpa, Professora
 object Utils {
   def printFields(f1: Field, f2: Field, p1Name: String, p2Name: String): Unit = {
