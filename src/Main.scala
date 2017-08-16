@@ -41,9 +41,9 @@ object Main extends App {
       if (f.ships.size >= 4) f
       else {
         println("Adicione o navio de tamanho " + (f.ships.size + 1))
-        val x = scanner.nextInt()
-        val y = scanner.nextInt()
-        val dir = scanner.next().charAt(0);
+        val x = readPosition()
+        val y = readPosition()
+        val dir = readDirection()
         f.ships.size + 1 match {
           case 1 => go(f.placeShip(f.updateStatus, new ShipOne(dir), new Point(x, y)))
           case 2 => go(f.placeShip(f.updateStatus, new ShipTwo(dir), new Point(x, y)))
@@ -54,7 +54,23 @@ object Main extends App {
     }
     go(f)
   }
-
+  
+  def readPosition(): Int = 
+    if (scanner.hasNextInt())
+      scanner.nextInt()
+    else {
+      scanner.next()
+      readPosition()
+    }
+  
+  def readDirection(): Char = {
+    val dir = scanner.next()
+    if (dir == "h" || dir == "v")
+      dir.charAt(0)
+    else
+      readDirection()
+  }
+  
   def startGame(p1: Player, p2: Player) {
     def go(aP: Player, dP: Player) {
       if (Game.checkGame(aP, dP) == gStates.draw) Utils.stateWin(new Player with PlayerDraw)
@@ -63,7 +79,7 @@ object Main extends App {
       else {
         Utils.printFields(aP.opField, dP.opField, aP.name, dP.name)
         println(aP.name + ", sua vez: ")
-        val hitP = new Point(scala.io.StdIn.readInt(), scala.io.StdIn.readInt())
+        val hitP = new Point(readPosition(), readPosition())
         val gameHit = Game.hit(aP, dP, hitP)
         if (gameHit._2) println("Acertou")
         else println("Errou")
