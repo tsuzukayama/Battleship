@@ -23,12 +23,10 @@ class Field(val points: Map[Point, Char] = (for (
     go(this.points, pos, 0)
   }
 
-  def placeShip(ship: Ship, thatPos: Point): Field = {
+  def placeShip(fStatus: (Ship, Point) => Field, ship: Ship, thatPos: Point): Field = {
     def go(ships: Map[Point, Ship], ship: Ship, pos: Point, acc: Int): Field = {
       if (acc == ship.len) {
-        val f = new Field(points = updateStatus(ship, thatPos).points, ships = ships.updated(thatPos, ship))
-        //println(f.points)
-        f
+        new Field(points = fStatus(ship, thatPos).points, ships = ships.updated(thatPos, ship))        
       } else if (pos.x < 0 || pos.y < 0 || pos.x >= 10 || pos.y >= 10) this
 
       else if (this.points.exists(p => p._1.compare(pos) && p._2 != 'e'))

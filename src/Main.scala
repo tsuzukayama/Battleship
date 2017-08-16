@@ -7,17 +7,20 @@ import java.io._
 import java.util.Scanner
 
 object Main {
+  val scanner = new java.util.Scanner(System.in)
+  
   def main(args: Array[String]) {
-
+    
+   
     println("Entre com o seu nome, jogador 1: ")
 
-    val p1Name = scala.io.StdIn.readLine()
+    val p1Name = scanner.next()
 
     val p1 = new Player(myField = posShips(new Field), name = p1Name)
 
     println("Entre com o seu nome, jogador 2: ")
 
-    val p2Name = scala.io.StdIn.readLine()
+    val p2Name = scanner.next()
     val p2 = new Player(myField = posShips(new Field), name = p2Name)
 
     startGame(p1, p2)
@@ -46,14 +49,14 @@ object Main {
       if (f.ships.size >= 4) f
       else {
         println("Adicione o navio de tamanho " + (f.ships.size + 1))
-        val x = scala.io.StdIn.readInt()
-        val y = scala.io.StdIn.readInt()
-        val dir = scala.io.StdIn.readChar()
+        val x = scanner.nextInt()
+        val y = scanner.nextInt()
+        val dir = scanner.next().charAt(0);
         f.ships.size + 1 match {
-          case 1 => go(f.placeShip(new shipOne(dir), new Point(x, y)))
-          case 2 => go(f.placeShip(new shipTwo(dir), new Point(x, y)))
-          case 3 => go(f.placeShip(new shipThree(dir), new Point(x, y)))
-          case 4 => go(f.placeShip(new shipFour(dir), new Point(x, y)))
+          case 1 => go(f.placeShip(f.updateStatus, new shipOne(dir), new Point(x, y)))
+          case 2 => go(f.placeShip(f.updateStatus, new shipTwo(dir), new Point(x, y)))
+          case 3 => go(f.placeShip(f.updateStatus, new shipThree(dir), new Point(x, y)))
+          case 4 => go(f.placeShip(f.updateStatus, new shipFour(dir), new Point(x, y)))
         }
       }
     }
