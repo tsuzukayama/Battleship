@@ -4,7 +4,7 @@ object Game {
 
   def createEmptyField: Field = new Field
 
-  private def gameOverHits: Int = 4 + 3 + 2 + 1
+  private def gameOverHits: Int = 10
 
   def hit(attack: Player, defender: Player, pos: Point): (Player, Boolean) = {
     if (defender.myField.hit(pos)._2)

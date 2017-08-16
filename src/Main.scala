@@ -29,11 +29,7 @@ object Main {
       Utils.readFile("Ranking.txt")
     }
 
-    data.recover {
-      case e: FileNotFoundException => {
-        List[String]()
-      }
-    }.onComplete {
+    data.onComplete {
       case Success(v: String) => {
         println("--------RAKING GERAL--------")
         println(v)
@@ -53,10 +49,10 @@ object Main {
         val y = scanner.nextInt()
         val dir = scanner.next().charAt(0);
         f.ships.size + 1 match {
-          case 1 => go(f.placeShip(f.updateStatus, new shipOne(dir), new Point(x, y)))
-          case 2 => go(f.placeShip(f.updateStatus, new shipTwo(dir), new Point(x, y)))
-          case 3 => go(f.placeShip(f.updateStatus, new shipThree(dir), new Point(x, y)))
-          case 4 => go(f.placeShip(f.updateStatus, new shipFour(dir), new Point(x, y)))
+          case 1 => go(f.placeShip(f.updateStatus, new ShipOne(dir), new Point(x, y)))
+          case 2 => go(f.placeShip(f.updateStatus, new ShipTwo(dir), new Point(x, y)))
+          case 3 => go(f.placeShip(f.updateStatus, new ShipThree(dir), new Point(x, y)))
+          case 4 => go(f.placeShip(f.updateStatus, new ShipFour(dir), new Point(x, y)))
         }
       }
     }

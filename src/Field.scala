@@ -29,7 +29,7 @@ class Field(val points: Map[Point, Char] = (for (
         new Field(points = fStatus(ship, thatPos).points, ships = ships.updated(thatPos, ship))        
       } else if (pos.x < 0 || pos.y < 0 || pos.x >= 10 || pos.y >= 10) this
 
-      else if (this.points.exists(p => p._1.compare(pos) && p._2 != 'e'))
+      else if (this.points.exists(p => p._1 == pos && p._2 != 'e'))
         this
 
       else go(ships, ship, ship.dir match {
@@ -41,7 +41,7 @@ class Field(val points: Map[Point, Char] = (for (
   }
 
   def hit(pos: Point): (Field, Boolean) = {
-    if (points.exists(p => p._1.compare(pos) && (p._2 == 'o' || p._2 == 'h')))
+    if (points.exists(p => p._1 == pos && (p._2 == 'o' || p._2 == 'h')))
       (new Field(points = points.updated(pos, 'h')), true)
     else (new Field(points = points.updated(pos, 'm')), false)
   }
