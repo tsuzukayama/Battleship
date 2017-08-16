@@ -1,1 +1,1 @@
-Battleship
+Battleship game made with Scala
