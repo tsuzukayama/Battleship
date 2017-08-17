@@ -4,7 +4,7 @@ object Game {
 
   def createEmptyField: Field = new Field
 
-  private def gameOverHits: Int = 10
+  private val gameOverHits: Int = 10
 
   def hit(attack: Player, defender: Player, pos: Point): (Player, Boolean) = {
     if (defender.myField.hit(pos)._2)
@@ -16,7 +16,7 @@ object Game {
       (new Player(
         myField = attack.myField,
         opField = new Field(attack.opField.updateState(attack.opField.points, pos, pStates.miss)),
-        name = attack.name), false)
+        name =   attack.name), false)
   }
 
   def checkGame(p1: Player, p2: Player): Char = {
